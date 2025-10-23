@@ -1,0 +1,109 @@
+name: pip packaging windows
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  # Python 3.9+ specific case where NumPy 2.x will be supported
+  wheels:
+    runs-on: windows-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        include:
+          - python-version: "3.9"
+            numpy-version: "1.19.3"
+          - python-version: "3.10"
+            numpy-version: "1.21.6"
+          - python-version: "3.11"
+            numpy-version: "1.23.2"
+          - python-version: "3.12"
+            numpy-version: "1.26.0"
+          - python-version: "3.13"
+            numpy-version: "2.1.0"
+    name: Build wheels for Python ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+      # For python >=3.9, numpy >= 2.0 for package build and ABI compatibility with numpy 1.X and 2.X
+      # cf. https://numpy.org/doc/stable/dev/depending_on_numpy.html#numpy-2-0-specific-advice
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          $originalDir = Get-Location
+          Set-Location "C:\vcpkg"
+          git pull
+          vcpkg update
+          Set-Location $originalDir
+          set VCPKG_BUILD_TYPE=release
+          vcpkg install eigen3 cgal --triplet x64-windows
+          vcpkg version
+          ls "C:\vcpkg\installed\x64-windows\bin\"
+          python -m pip install --user numpy>=2.0
+          python -m pip install --user -r .\ext\gudhi-deploy\build-requirements.txt
+          python -m pip install --user twine delvewheel
+          python -m pip list
+      - name: Build python wheel and repair it
+        env:
+          SKBUILD_CMAKE_DEFINE: "FORCE_EIGEN_DEFAULT_DENSE_INDEX_TYPE_TO_INT=ON;CMAKE_TOOLCHAIN_FILE=c:/vcpkg/scripts/buildsystems/vcpkg.cmake;VCPKG_TARGET_TRIPLET=x64-windows"
+        shell: pwsh
+        run: |
+          python -m pip wheel -ve .
+          ls ".\"
+          delvewheel show --add-path=C:/vcpkg/installed/x64-windows/bin *.whl
+          delvewheel repair --add-path=C:/vcpkg/installed/x64-windows/bin -w wheelhouse -v *.whl
+      # Test ABI compatibility with numpy 1.X
+      - name: Install and test python wheel
+        shell: pwsh
+        run: |
+          Get-Location
+          dir
+          dir wheelhouse
+          python -m pip install --user numpy~=${{ matrix.numpy-version }}
+          python -m pip install --user pytest scipy matplotlib scikit-learn POT (Get-ChildItem wheelhouse\*.whl | % FullName)
+          python -c "import gudhi; print(gudhi.__version__)"
+          cp data/points/human.off .
+          python -m pytest src/python/test/test_alpha_complex.py
+          python -m pytest src/python/test/test_betti_curve_representations.py
+          python -m pytest src/python/test/test_bottleneck_distance.py
+          python -m pytest src/python/test/test_collapse_edges.py
+          python -m pytest src/python/test/test_cover_complex.py
+          python -m pytest src/python/test/test_cubical_complex.py
+          python -m pytest src/python/test/test_cubical_persistence_low_dim.py
+          python -m pytest src/python/test/test_datasets_generators.py
+          python -m pytest src/python/test/test_delaunay_complex.py
+          python -m pytest src/python/test/test_dtm_rips_complex.py
+          python -m pytest src/python/test/test_euclidean_witness_complex.py
+          python -m pytest src/python/test/test_off.py
+          python -m pytest src/python/test/test_persistence_graphical_tools.py
+          python -m pytest src/python/test/test_reader_utils.py
+          python -m pytest src/python/test/test_remote_datasets.py
+          python -m pytest src/python/test/test_representations_interface.py
+          python -m pytest src/python/test/test_representations_preprocessing.py
+          python -m pytest src/python/test/test_representations.py
+          python -m pytest src/python/test/test_rips_complex.py
+          python -m pytest src/python/test/test_simplex_generators.py
+          python -m pytest src/python/test/test_simplex_tree.py
+          python -m pytest src/python/test/test_simplex_tree_serialization.py
+          python -m pytest src/python/test/test_sklearn_cubical_persistence.py
+          python -m pytest src/python/test/test_sklearn_rips_persistence.py
+          python -m pytest src/python/test/test_subsampling.py
+          python -m pytest src/python/test/test_tangential_complex.py
+          python -m pytest src/python/test/test_time_delay.py
+          python -m pytest src/python/test/test_tomato.py
+          python -m pytest src/python/test/test_wasserstein_barycenter.py
+          python -m pytest src/python/test/test_weighted_rips_complex.py
+          python -m pytest src/python/test/test_witness_complex.py
+      - name: Publish on PyPi
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        shell: pwsh
+        run: python -m twine upload (Get-ChildItem wheelhouse\*.whl | % FullName)
