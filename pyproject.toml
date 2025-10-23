@@ -14,7 +14,12 @@ dependencies = ["typer[all]", "numpy", "pandas", "h5py", "gdown"]
 include-package-data = true
 
 [tool.setuptools.package-data]
-phbenchmark = ["../libs/**/*", "*"]
+phbenchmark = [
+    "../libs/**/*",
+    "../libs/gudhi-devel/.github/**/*",
+    "../libs/ripser.py/.github/**/*",
+    "../libs/ripser.py/.*",
+    "*"]
 
 [tool.setuptools.packages.find]
 include = ["phbenchmark*"]
