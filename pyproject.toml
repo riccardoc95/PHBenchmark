@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "typer[all]"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phbenchmark"
+version = "0.1.0"
+description = "CLI tool for dataset management and benchmarking"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = ["typer[all]", "numpy", "pandas", "h5py", "gdown"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+phbenchmark = ["../libs/**/*", "*"]
+
+[tool.setuptools.packages.find]
+include = ["phbenchmark*"]
+
+[project.scripts]
+phbenchmark = "phbenchmark.app:app"

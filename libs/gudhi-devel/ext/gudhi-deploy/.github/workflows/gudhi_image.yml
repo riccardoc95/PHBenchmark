@@ -1,0 +1,14 @@
+name: Build and Push GUDHI installation docker image
+
+on:
+  push:
+    paths:
+      - "Dockerfile_for_gudhi_installation"
+
+jobs:
+  gudhi-installation-docker-build:
+    uses: ./.github/workflows/docker_build_push.yml
+    with:
+      dockerfile-path: Dockerfile_for_gudhi_installation
+      docker-image-name: latest_gudhi_version
+      image-tag: ${GITHUB_SHA::8}

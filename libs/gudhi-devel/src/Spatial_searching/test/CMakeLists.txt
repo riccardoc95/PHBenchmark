@@ -1,0 +1,5 @@
+add_executable_with_targets(Spatial_searching_test_Kd_tree_search test_Kd_tree_search.cpp CGAL::CGAL Eigen3::Eigen TBB::tbb)
+if(TARGET CGAL::CGAL AND TARGET Eigen3::Eigen)
+  include(GUDHI_boost_test)
+  gudhi_add_boost_test(Spatial_searching_test_Kd_tree_search)
+endif ()

@@ -1,0 +1,14 @@
+name: Build and push on tag CircleCI without CGAL docker image
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  circleci-wo-cgal-docker-build:
+    uses: ./.github/workflows/docker_build_push.yml
+    with:
+      dockerfile-path: Dockerfile_for_circleci_image_without_cgal
+      docker-image-name: ci_for_gudhi_wo_cgal
+      image-tag: ${{ github.ref_name }}

@@ -1,0 +1,14 @@
+name: Build and push on tag pip docker image
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  pip-docker-build:
+    uses: ./.github/workflows/docker_build_push.yml
+    with:
+      dockerfile-path: Dockerfile_for_pip
+      docker-image-name: pip_for_gudhi
+      image-tag: ${{ github.ref_name }}

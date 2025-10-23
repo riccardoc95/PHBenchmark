@@ -1,0 +1,14 @@
+name: Build and push on tag CircleCI docker image
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  circleci-docker-build:
+    uses: ./.github/workflows/docker_build_push.yml
+    with:
+      dockerfile-path: Dockerfile_for_circleci_image
+      docker-image-name: ci_for_gudhi
+      image-tag: ${{ github.ref_name }}
