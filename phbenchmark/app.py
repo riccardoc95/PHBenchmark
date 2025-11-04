@@ -25,7 +25,7 @@ SOFTWARES = {
     "pixh": BASE_DIR / "libs" / "PixHomology/",
     "cripser": BASE_DIR / "libs" / "CubicalRipser_3dim-0.0.21/",
     "gudhi": BASE_DIR / "libs" / "gudhi-devel/",
-    "ripserpy": BASE_DIR / "libs" / "ripser.py/",
+    "ripser": BASE_DIR / "libs" / "ripser.py/",
 }
 
 
@@ -85,11 +85,17 @@ def install(
     if software == "all":
         for name, path in SOFTWARES.items():
             typer.echo(f"Installing {name} from {path}...")
-            subprocess.run(["pip", "install", path], check=True)
+            try:
+                subprocess.run(["pip", "install", path], check=True)
+            except subprocess.CalledProcessError:
+                subprocess.run(["pip", "install", name], check=True)
         typer.echo("All software installed successfully.")
     elif software in SOFTWARES:
         typer.echo(f"Installing {software} from {SOFTWARES[software]}...")
-        subprocess.run(["pip", "install", SOFTWARES[software]], check=True)
+        try:
+            subprocess.run(["pip", "install", SOFTWARES[software]], check=True)
+        except subprocess.CalledProcessError:
+            subprocess.run(["pip", "install", software], check=True)
         typer.echo(f"{software} installed successfully.")
     else:
         typer.echo(f"Unknown software '{software}'. Available: {list(SOFTWARES.keys())}")

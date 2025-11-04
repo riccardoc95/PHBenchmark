@@ -16,6 +16,14 @@ struct UPoint {
 
 // PixHomology core functions
 Result computePH(double* inputArr, int numR, int numC);
+Result computePH1(double* inputArr, int numR, int numC);
+Result test(double *inputArr, int numR, int numC);
+int find_root(int start_idx,
+              const std::vector<int8_t>& mpatch_dir,
+              int numRows,
+              int numCols);
+int find_parent(int x, std::vector<int>& parent);
+void union_merge(int a, int b, std::vector<int>& parent);
 void freemem();
 
 #endif // PIXHOM_HPP

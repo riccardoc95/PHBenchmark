@@ -99,6 +99,57 @@ py::object py_plot_img(py::array_t<double> input_array, py::array_t<double> inde
     return py::none();
 }
 
+py::object py_test(py::array_t<double> input_array, bool return_index = false, int maxdim = 0) {
+    // Ensure the input array is contiguous and 1D/2D
+    py::buffer_info buf_info = input_array.request();
+    int numRows;
+    int numCols;
+    if (buf_info.ndim == 2) {
+        if (buf_info.shape[0] == 1 & buf_info.shape[1] != 1){
+            numRows = buf_info.shape[1];
+            numCols = 1;
+        } else{
+            numRows = buf_info.shape[0];
+            numCols = buf_info.shape[1];
+        }
+    } else if (buf_info.ndim == 1){
+        numRows = buf_info.shape[0];
+        numCols = 1;
+    }else{
+        throw std::runtime_error("Input should be a 1D/2D NumPy array");
+    }
+
+    // Call the computePH function (dim = 0)
+    Result res;
+    try {
+        change_sign((double*)buf_info.ptr, numRows * numCols);
+        res = test((double*)buf_info.ptr, numRows, numCols);
+        change_sign((double*)buf_info.ptr, numRows * numCols);
+    } catch (const std::exception& e) {
+        throw std::runtime_error(std::string("Error in computePH (dim = 0): ") + e.what());
+    }
+
+    // Create numpy arrays to return
+    py::array_t<double> data_array_0({res.length / 2, 2});
+    auto data_buf = data_array_0.request();
+    std::copy(res.data.begin(), res.data.end(), (double *)data_buf.ptr);
+
+    py::array_t<int> posix_array_0({res.length / 2, 4});
+    auto posix_buf = posix_array_0.request();
+    for (size_t i = 0; i < (res.posix.size() * 2); i += 4) {
+        ((int*)posix_buf.ptr)[i] = res.posix[i / 2] % numCols;
+        ((int*)posix_buf.ptr)[i + 1] = res.posix[i / 2] / numCols;
+        ((int*)posix_buf.ptr)[i + 2] = res.posix[(i / 2) + 1] % numCols;
+        ((int*)posix_buf.ptr)[i + 3] = res.posix[(i / 2) + 1] / numCols;
+    }
+    freemem();
+
+    if (return_index) {
+        return py::make_tuple(data_array_0, posix_array_0);
+    } else {
+        return data_array_0;
+    }
+}
 
 py::object py_computePH(py::array_t<double> input_array, bool return_index = false, int maxdim = 0) {
     // Ensure the input array is contiguous and 1D/2D
@@ -123,7 +174,9 @@ py::object py_computePH(py::array_t<double> input_array, bool return_index = fal
     // Call the computePH function (dim = 0)
     Result res;
     try {
+        change_sign((double*)buf_info.ptr, numRows * numCols);
         res = computePH((double*)buf_info.ptr, numRows, numCols);
+        change_sign((double*)buf_info.ptr, numRows * numCols);
     } catch (const std::exception& e) {
         throw std::runtime_error(std::string("Error in computePH (dim = 0): ") + e.what());
     }
@@ -154,9 +207,7 @@ py::object py_computePH(py::array_t<double> input_array, bool return_index = fal
         // Call the computePH function (dim = 0)
         Result res;
         try {
-            change_sign((double*)buf_info.ptr, numRows * numCols);
-            res = computePH((double*)buf_info.ptr, numRows, numCols);
-            change_sign((double*)buf_info.ptr, numRows * numCols);
+            res = computePH1((double*)buf_info.ptr, numRows, numCols);
         } catch (const std::exception& e) {
             throw std::runtime_error(std::string("Error in computePH (dim = 0): ") + e.what());
         }
@@ -192,6 +243,20 @@ py::object py_computePH(py::array_t<double> input_array, bool return_index = fal
 
 PYBIND11_MODULE(pixhomology, m) {
     m.doc() = "PixHomology is an open-source software for image processing and analysis focused on persistent homology computation. It provides a set of tools and algorithms to explore the topological features of 1D series and 2D images, enabling users to extract meaningful information about the underlying structures."; // Optional module docstring
+
+    m.def("test", &py_test,
+      "A function that computes Persistent Homology (PH) on 1D series or 2D image data.\n\n"
+      "Parameters:\n"
+      "  input_array (numpy.ndarray): A 1D/2D array representing the input image data on which Persistent Homology is to be computed.\n"
+      "  return_index (bool, optional): A flag indicating whether to return indices of the features. Defaults to False.\n"
+      "  maxdim (int, optional): The maximum dimension of homology to compute. Defaults to 0.\n\n"
+      "Returns:\n"
+      "  numpy.ndarray or tuple:\n"
+      "    - dgms (numpy.ndarray or list of numpy.ndarray): If maxdim=0, an (N, 2) array with birth and death values of dimension zero. If maxdim=1, a list of arrays for dimension 0 and dimension 1.\n"
+      "    - indexes (numpy.ndarray or list of numpy.ndarray): If return_index=True. If maxdim=0, an (N, 4) array with x_birth, y_birth, x_death, y_death coordinates in pixels of dimension zero PH. If maxdim=1, a list of arrays for dimension 0 and dimension 1.",
+      py::arg("input_array"),
+      py::arg("return_index") = false,
+      py::arg("maxdim") = 0);
 
     m.def("computePH", &py_computePH,
       "A function that computes Persistent Homology (PH) on 1D series or 2D image data.\n\n"
