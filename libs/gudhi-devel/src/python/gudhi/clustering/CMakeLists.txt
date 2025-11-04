@@ -1,1 +1,0 @@
-nanobind_add_module_with_targets(_tomato_ext _tomato.cc)

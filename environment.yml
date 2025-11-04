@@ -1,0 +1,8 @@
+name: phbenchmark
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.8
+  - topologytoolkit==1.3.0
+  - time
+  - pip

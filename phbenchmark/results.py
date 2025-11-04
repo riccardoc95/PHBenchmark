@@ -1,134 +1,103 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import glob
-import os
-
-# === Configurazione ===
-INPUT_DIR = "results"
-OUTPUT_DIR = "results"
-DATASET_DIRS = {
-
-}
-os.makedirs(f"{OUTPUT_DIR}/plots", exist_ok=True)
-os.makedirs(f"{OUTPUT_DIR}/tables", exist_ok=True)
-
-sns.set(style="whitegrid", font_scale=1.2)
-
-# === Lettura di tutti i CSV ===
-files = glob.glob(f"{INPUT_DIR}/*.csv")
-
-all_data = []
-for f in files:
-    base = os.path.basename(f)
-    parts = base.replace(".csv", "").split("_")
-    try:
-        dataset  = parts[0]
-        software = parts[1]
-        dim_topo = parts[2]
-    except IndexError:
-        software = "unknown"
-        dataset = "unknown"
-        dim_topo = "unknown"
-
-    df = pd.read_csv(f)
-    df["software"] = software
-    df["dataset"] = dataset
-    df["dim_topo"] = dim_topo
-    all_data.append(df)
-
-df_all = pd.concat(all_data, ignore_index=True)
-
-# === Calcolo della dimensione del dataset (.npy) ===
-dataset_dims = {}
-for dataset, group in df_all.groupby("dataset"):
-    folder = f"datasets/{dataset}_npy"
-    npy_files = glob.glob(os.path.join(folder, "*.npy"))
-    if npy_files:
-        # carica solo il primo file (tutti hanno stessa dimensione)
-        arr = np.load(npy_files[0])
-        # dimensione totale (numero di elementi)
-        dim = arr.size
-        # oppure se vuoi la dimensione 2D/3D:
-        shape_str = "×".join(map(str, arr.shape))
-        dataset_dims[dataset] = {"dim": dim, "shape": shape_str}
-        print(f"📏 {dataset}: shape={shape_str}, total_elements={dim}")
-    else:
-        dataset_dims[dataset] = {"dim": 0, "shape": "unknown"}
+#!/usr/bin/env python3
+import csv
+import json
+from pathlib import Path
+import statistics
+from collections import defaultdict
+import typer
 
 
-df_all["dim_data"] = df_all["dataset"].map(lambda d: dataset_dims[d]["dim"])
-df_all["shape"] = df_all["dataset"].map(lambda d: dataset_dims[d]["shape"])
+def collect_results(
+    results_dir: Path = typer.Option(
+        Path("results"),
+        "--results",
+        "-r",
+        help="Directory containing benchmark result CSV files (organized by method/dataset).",
+    ),
+    output_json: Path = typer.Option(
+        Path("results/benchmarks.json"),
+        "--output",
+        "-o",
+        help="Path to save the full consolidated JSON file.",
+    ),
+    summary_json: Path = typer.Option(
+        Path("results/benchmarks_summary.json"),
+        "--summary",
+        "-s",
+        help="Path to save the JSON summary with averages and standard deviations.",
+    ),
+):
+    """
+    Read all benchmark CSVs and aggregate them into:
+      1. Full JSON: results[method][dataset][dim] = list of records
+      2. Summary JSON: results[method][dataset][dim] = {avg_time, std_time, avg_mem, std_mem}
+    """
+    typer.echo(f"Collecting results from: {results_dir}")
+    data = defaultdict(lambda: defaultdict(dict))
+    summary = defaultdict(lambda: defaultdict(dict))
 
-df_all.to_csv(f"{OUTPUT_DIR}/plots/df_all.csv", index=False)
-print("✅ Summary saved to output/summary.csv")
+    if not results_dir.exists():
+        typer.echo(f"Error: directory {results_dir} not found.")
+        raise typer.Exit(code=1)
 
-# === Statistiche riassuntive ===
-summary = (
-    df_all.groupby(["software", "dataset", "dim_topo", "shape", "dim_data"])
-    .agg(
-        mean_time_s=("time_s", "mean"),
-        std_time_s=("time_s", "std"),
-        mean_mem_mb=("peak_memory_mb", "mean"),
-        std_mem_mb=("peak_memory_mb", "std"),
-        n=("filename", "count"),
-    )
-    .reset_index()
-)
+    for method_dir in results_dir.iterdir():
+        if not method_dir.is_dir():
+            continue
+        method = method_dir.name
 
-summary.to_csv(f"{OUTPUT_DIR}/plots/summary.csv", index=False)
-print("✅ Summary saved to output/summary.csv")
-print(summary)
-# === Grafici comparativi ===
-# Tempo medio per dataset e dim_topo
-plt.figure(figsize=(9, 5))
-g = sns.catplot(
-    data=summary,
-    x="dataset",
-    y="mean_time_s",
-    hue="software",
-    col="dim_topo",
-    kind="bar",
-    errorbar="sd",
-    height=4,
-    aspect=1.2
-)
-g.set_titles("dim_topo = {col_name}")
-g.set_axis_labels("Dataset", "Tempo medio (s)")
-plt.tight_layout()
-plt.savefig(f"{OUTPUT_DIR}/plots/time_mean_by_topodim.png", dpi=300)
-plt.close()
+        for dataset_dir in method_dir.iterdir():
+            if not dataset_dir.is_dir():
+                continue
+            dataset = dataset_dir.name
 
-# Variante: tempo medio separato per dim_topo
-for topo_dim, df_t in summary.groupby("dim_topo"):
-    plt.figure(figsize=(8, 5))
-    sns.barplot(data=df_t, x="dataset", y="mean_time_s", hue="software", errorbar="sd")
-    plt.title(f"Tempo medio per dataset (topological dim={topo_dim})")
-    plt.ylabel("Tempo medio (s)")
-    plt.xlabel("Dataset")
-    plt.legend(title="Software")
-    plt.tight_layout()
-    plt.savefig(f"{OUTPUT_DIR}/plots/time_mean_dim{topo_dim}.png", dpi=300)
-    plt.close()
+            for csv_path in dataset_dir.glob("dim*.csv"):
+                try:
+                    dim = int(csv_path.stem.replace("dim", ""))
+                except ValueError:
+                    continue
 
-# Scaling log-log
-df_scale = summary.dropna(subset=["dim_data"])
-for topo_dim, df_t in df_scale.groupby("dim_topo"):
-    plt.figure(figsize=(8, 6))
-    sns.lineplot(data=df_t, x="dim_data", y="mean_time_s", hue="software", marker="o")
-    plt.xscale("log")
-    plt.yscale("log")
-    plt.title(f"Scaling log-log (dim_topo={topo_dim})")
-    plt.xlabel("Numero elementi (log)")
-    plt.ylabel("Tempo medio (s, log)")
-    plt.tight_layout()
-    plt.savefig(f"{OUTPUT_DIR}/plots/scaling_dim{topo_dim}_loglog.png", dpi=300)
-    plt.close()
+                records = []
+                with csv_path.open() as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        try:
+                            records.append({
+                                "filename": row["filename"],
+                                "time_s": float(row["time_s"]),
+                                "peak_memory_mb": float(row["peak_memory_mb"]),
+                            })
+                        except ValueError:
+                            continue
 
-# === Tabella LaTeX ===
-with open(f"{OUTPUT_DIR}/tables/summary_table.tex", "w") as f:
-    f.write(summary.to_latex(index=False, float_format="%.2f"))
-print("✅ LaTeX table saved to output/tables/summary_table.tex")
+                if not records:
+                    continue
 
-print("🎉 Analisi completata!")
+                data[method][dataset][dim] = records
+
+                # --- Compute summary stats ---
+                times = [r["time_s"] for r in records]
+                mems = [r["peak_memory_mb"] for r in records]
+
+                summary[method][dataset][dim] = {
+                    "avg_time_s": statistics.mean(times),
+                    "std_time_s": statistics.pstdev(times) if len(times) > 1 else 0.0,
+                    "avg_peak_memory_mb": statistics.mean(mems),
+                    "std_peak_memory_mb": statistics.pstdev(mems) if len(mems) > 1 else 0.0,
+                    "num_files": len(records)
+                }
+
+    # Convert defaultdict → dict for JSON serialization
+    data_dict = {m: {d: dict(vals) for d, vals in ds.items()} for m, ds in data.items()}
+    summary_dict = {m: {d: dict(vals) for d, vals in ds.items()} for m, ds in summary.items()}
+
+    # Save full results
+    output_json.parent.mkdir(parents=True, exist_ok=True)
+    with output_json.open("w", encoding="utf-8") as f:
+        json.dump(data_dict, f, indent=2, sort_keys=True)
+    typer.echo(f"Full results saved to {output_json}")
+
+    # Save summary results
+    summary_json.parent.mkdir(parents=True, exist_ok=True)
+    with summary_json.open("w", encoding="utf-8") as f:
+        json.dump(summary_dict, f, indent=2, sort_keys=True)
+    typer.echo(f"Summary statistics saved to {summary_json}")

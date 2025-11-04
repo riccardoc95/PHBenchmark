@@ -1,1 +1,0 @@
-add_executable_with_targets(bitmap_cubical_complex_benchmark bitmap_cubical_complex_benchmark.cpp TBB::tbb)

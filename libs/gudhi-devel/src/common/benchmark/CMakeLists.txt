@@ -1,1 +1,0 @@
-add_executable_with_targets(Graph_simplicial_complex_benchmark Graph_simplicial_complex_benchmark.cpp TBB::tbb)
