@@ -2,7 +2,7 @@
 import typer
 from phbenchmark.download import download_dataset
 from phbenchmark.run import run_benchmark
-from phbenchmark.results import collect_results
+from phbenchmark.collect import collect_results
 from phbenchmark.report import make_report
 
 app = typer.Typer(help="PHBenchmark CLI — tools for downloading datasets and benchmarking PH methods.")

@@ -29,8 +29,8 @@ def collect_results(
 ):
     """
     Read all benchmark CSVs and aggregate them into:
-      1. Full JSON: results[method][dataset][dim] = list of records
-      2. Summary JSON: results[method][dataset][dim] = {avg_time, std_time, avg_mem, std_mem}
+      1. Full JSON
+      2. Summary JSON
     """
     typer.echo(f"Collecting results from: {results_dir}")
     data = defaultdict(lambda: defaultdict(dict))
