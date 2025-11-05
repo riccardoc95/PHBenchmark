@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 
 DATASETS = {
-    "test": "19GnE8Qw375kXTHmG_35GaXabvHVXSfUc",
+    # "test": "19GnE8Qw375kXTHmG_35GaXabvHVXSfUc",
     "mnist": "1pG1jzW8qNh5PRWT8kC4XT_udWQNSFLFo",
     "cifar10": "17lULKw6WX546SJxcTYl0qsLZLqyPO1Hk",
     "imagenet": "1BNl5VivoFJpevkH7b0sYuVnN39d830T9",
@@ -17,6 +17,15 @@ DATASETS = {
     "mast": "11_lydKNfvE889bsRlU9nIRw9n4GgEYTs",
 }
 
+IMAGE_SIZE = {
+    "test": 28*28,
+    "mnist": 28*28,
+    "cifar10": 32*32,
+    "imagenet": 300*300,
+    "div2k": 1000*1000,
+    "kather": 5000*5000,
+    "mast": 5500*5500,
+}
 
 def extract_images(h5_path: Path, output_dir: Path, max_workers: int = 8):
     """Extract all images from an HDF5 file and save as .npy files."""

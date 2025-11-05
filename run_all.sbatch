@@ -52,4 +52,4 @@ phbenchmark run \
     --method "$METHOD" \
     --dataset "datasets/${DATASET}_npy" \
     --maxdim "$DIM" \
-    --output "$CSV_PATH"
+      --output "$CSV_PATH"

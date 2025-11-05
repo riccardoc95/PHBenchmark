@@ -19,6 +19,7 @@ dependencies = [
   "tqdm",
   "pandas",
   "jinja2",
+  "seaborn"
 ]
 
 [tool.setuptools.packages.find]

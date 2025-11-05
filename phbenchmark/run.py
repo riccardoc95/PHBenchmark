@@ -94,7 +94,3 @@ def run_benchmark(
                 typer.echo(f" Error: {e}")
 
     typer.echo(f"\nResults saved into {output_csv}")
-
-
-if __name__ == "__main__":
-    app()
