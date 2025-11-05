@@ -6,6 +6,19 @@ from pathlib import Path
 import re
 import platform
 import typer
+import multiprocessing
+import os
+
+def get_max_threads() -> int:
+    """Return the number of logical CPU cores available."""
+    try:
+        return multiprocessing.cpu_count()
+    except NotImplementedError:
+        return 1
+
+maxthreads = os.getenv("SLURM_CPUS_PER_TASK")
+if maxthreads is None:
+    maxthreads = get_max_threads()
 
 current_path = Path(__file__).resolve()
 
@@ -36,13 +49,16 @@ def run_with_time(script_path: Path, npy_file: Path, maxdim: int) -> tuple[float
         regex = r"(\d+)\s+peak memory footprint"
         divisor = 1024 * 1024
 
-    cmd = [
-        time_command, time_flag,
-        sys.executable, str(script_path), str(npy_file), str(maxdim)
-    ]
+    #cmd = [
+    #    time_command, time_flag,
+    #    sys.executable, str(script_path), str(npy_file), str(maxdim)
+    #]
+
+    cmd = f"OMP_NUM_THREADS={maxthreads} {time_command} {time_flag} {sys.executable} {script_path} {npy_file} {maxdim}"
+
 
     start = time.time()
-    process = subprocess.run(cmd, capture_output=True, text=True)
+    process = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     elapsed = time.time() - start
 
     mem_match = re.search(regex, process.stderr)
@@ -65,7 +81,7 @@ def run_benchmark(
         raise typer.Exit(code=1)
 
     python_script = METHODS[method]
-    typer.echo(f"Running {method} on {dataset_dir} (maxdim={maxdim})...")
+    typer.echo(f"Running {method} on {dataset_dir} (maxdim={maxdim}) (threads={maxthreads})...")
 
     if not python_script.exists():
         typer.echo(f"Error: Python script {python_script} not found.")

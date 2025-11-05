@@ -18,13 +18,13 @@ DATASETS = {
 }
 
 IMAGE_SIZE = {
-    "test": 28*28,
+    #"test": 28*28,
     "mnist": 28*28,
     "cifar10": 32*32,
     "imagenet": 300*300,
     "div2k": 1000*1000,
     "kather": 5000*5000,
-    "mast": 5500*5500,
+    "mast": 4800*5000,
 }
 
 def extract_images(h5_path: Path, output_dir: Path, max_workers: int = 8):
