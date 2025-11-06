@@ -61,16 +61,25 @@ def collect_results(
                     reader = csv.DictReader(f)
                     for row in reader:
                         try:
-                            records.append({
-                                "filename": row["filename"],
-                                "time_s": float(row["time_s"]),
-                                "peak_memory_mb": float(row["peak_memory_mb"]),
-                            })
+                            if method == "ripser" and dim == 1:
+                                records.append({
+                                    "filename": row["filename"],
+                                    "time_s": float(0),
+                                    "peak_memory_mb": float(0),
+                                })
+                            else:
+                                records.append({
+                                    "filename": row["filename"],
+                                    "time_s": float(row["time_s"]),
+                                    "peak_memory_mb": float(row["peak_memory_mb"]),
+                                })
                         except ValueError:
                             continue
 
                 if not records:
                     continue
+
+
 
                 data[method][dataset][dim] = records
 

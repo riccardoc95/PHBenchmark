@@ -14,7 +14,7 @@ DATASETS = {
     "imagenet": "1BNl5VivoFJpevkH7b0sYuVnN39d830T9",
     "div2k": "1XkeGHk9ObsDoChMSrunozZHyLeKGiJ5N",
     "kather": "1Enb3EHrumPNcPwEUoe8Eon8wXAynONBD",
-    "mast": "11_lydKNfvE889bsRlU9nIRw9n4GgEYTs",
+    #"mast": "11_lydKNfvE889bsRlU9nIRw9n4GgEYTs",
 }
 
 IMAGE_SIZE = {
@@ -24,7 +24,7 @@ IMAGE_SIZE = {
     "imagenet": 300*300,
     "div2k": 1000*1000,
     "kather": 5000*5000,
-    "mast": 4800*5000,
+    #"mast": 4500*4500,
 }
 
 def extract_images(h5_path: Path, output_dir: Path, max_workers: int = 8):
