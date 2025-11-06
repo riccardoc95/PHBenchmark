@@ -1,0 +1,188 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\title{\textbf{PixHomology Benchmark: User and Reproducibility Guide}}
+\author{PixHomology Development Team}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+PixHomology is a C++/pybind11 library for computing persistent homology on 2D images. It provides an efficient and memory-aware implementation for computing 0-dimensional and 1-dimensional persistence diagrams from grayscale or binary images represented as NumPy 2D arrays. The accompanying \texttt{PHBenchmark} package automates the benchmarking process across multiple persistent homology backends (PixHomology, Cripser, GUDHI, Ripser, TTK) and datasets.
+
+This document explains:
+\begin{itemize}
+    \item The internal logic and basic usage of PixHomology.
+    \item How to compute persistent homology from NumPy arrays.
+    \item How to install and use the PHBenchmark repository for reproducing experiments and reports.
+\end{itemize}
+
+\section{PixHomology: Core Functionality}
+
+\subsection{Basic Workflow}
+PixHomology converts a 2D NumPy array \texttt{img} into a complex and computes persistence diagrams through lower-star filtrations.
+
+The typical steps are:
+\begin{enumerate}
+    \item Import the library and provide a 2D NumPy array.
+    \item Choose the homology dimension (0 or 1).
+    \item Compute the persistence diagram.
+\end{enumerate}
+
+\subsection{Example Usage}
+\begin{lstlisting}[language=Python, caption=Basic persistent homology computation using PixHomology]
+import numpy as np
+import pixhomology as px
+
+# Example: create a synthetic 2D image
+img = np.random.rand(28, 28)
+
+# Compute 0- and 1-dimensional persistence diagrams
+ph0 = px.computePH(img, maxdim=0)
+ph0, ph1 = px.computePH(img, maxdim=1)
+
+print("H0 diagram:", ph0)
+print("H1 diagram:", ph1)
+\end{lstlisting}
+
+The output is a list of (birth, death) pairs for each topological feature. The function automatically handles grayscale-to-filtration conversion using lower-star filtration rules.
+
+\subsection{Documentation and API}
+For a complete description of all functionalities and the full API of PixHomology, please refer to the official library documentation available at:
+
+https://riccardoc95.github.io/PixHomology/
+
+\section{Repository Overview}
+The \texttt{PHBenchmark} project wraps PixHomology and other libraries into a unified benchmarking toolchain.
+
+\subsection{Main Structure}
+\begin{verbatim}
+PHBenchmark/
+ environment.yml               # Conda environment for full reproducibility
+ run_all.sbatch                # SLURM array job for distributed benchmarking
+ phbenchmark/
+    app.py                     # CLI entry point (Typer)
+    download.py                # dataset fetching/extraction
+    run.py                     # executes benchmarks via /usr/bin/time
+    collect.py                 # aggregates CSV -> JSON summaries
+    report.py                  # generates plots and LaTeX tables
+    tests/                     # wrappers for each method (pixh, gudhi, etc.)
+ PixHomology/                  # local source for PixHomology library
+\end{verbatim}
+
+\section{Installation}
+The repository includes an \texttt{environment.yml} file that builds a complete reproducible environment.
+
+\subsection{Creating the Environment}
+\begin{lstlisting}[language=bash]
+conda env create -f environment.yml
+conda activate phbenchmark
+\end{lstlisting}
+
+This installs:
+\begin{itemize}
+    \item Python 3.11 and Topology ToolKit (TTK)
+    \item Persistent homology libraries: Ripser, Cripser, GUDHI
+    \item PixHomology (editable install from local source)
+    \item PHBenchmark CLI
+\end{itemize}
+
+\subsection{Verification}
+\begin{lstlisting}[language=bash]
+phbenchmark --help
+python -c "import pixhomology as px; print('PixHomology OK', px.__version__)"
+\end{lstlisting}
+
+\section{Using PHBenchmark}
+
+\subsection{Dataset Download}
+\begin{lstlisting}[language=bash]
+phbenchmark download --datasets_dir datasets --dataset mnist
+\end{lstlisting}
+
+Available datasets: MNIST, CIFAR10, ImageNet, DIV2K, Kather. Images are expanded to \texttt{datasets/<name>\_npy/}.
+
+\subsection{Running Benchmarks}
+Each run measures runtime and peak memory usage.
+\begin{lstlisting}[language=bash]
+phbenchmark run \
+  --method pixh \
+  --dataset datasets/mnist_npy \
+  --maxdim 1 \
+  --output results/pixh/mnist/dim1.csv
+\end{lstlisting}
+
+\subsection{Collecting and Reporting}
+\begin{lstlisting}[language=bash]
+phbenchmark collect \
+  --results results \
+  --output results/benchmarks.json \
+  --summary results/benchmarks_summary.json
+
+phbenchmark report \
+  --summary results/benchmarks_summary.json \
+  --plots-dir results/plots \
+  --latex-output results/benchmark_table.tex
+\end{lstlisting}
+
+Outputs include detailed plots and a LaTeX table summarizing average runtime and memory per method and dataset.
+
+\section{End-to-End MNIST Example}
+\begin{lstlisting}[language=bash]
+conda activate phbenchmark
+phbenchmark download --datasets_dir datasets --dataset mnist
+
+for m in pixh cripser gudhi ripser ttk; do
+  for k in 0 1; do
+    out="results/${m}/mnist/dim${k}.csv"
+    mkdir -p $(dirname $out)
+    phbenchmark run --method $m --dataset datasets/mnist_npy \
+        --maxdim $k --output $out
+  done
+done
+
+phbenchmark collect --results results --output results/benchmarks.json \
+    --summary results/benchmarks_summary.json
+phbenchmark report --summary results/benchmarks_summary.json \
+    --plots-dir results/plots --latex-output results/benchmark_table.tex
+\end{lstlisting}
+
+\section{Running on SLURM}
+The provided \texttt{run\_all.sbatch} automates all runs as a SLURM job array.
+\begin{lstlisting}[language=bash]
+sbatch --array=0-<N-1> run_all.sbatch
+\end{lstlisting}
+
+Edit the file to configure datasets, methods, and dimensions. Logs are stored under \texttt{logs/}.
+
+\section{Software Installed}
+\begin{itemize}
+    \item \textbf{PixHomology} - This repository (C++/pybind11)
+    \item \textbf{Cripser} - \url{https://github.com/shizuo-kaji/CubicalRipser_3dim}
+    \item \textbf{GUDHI} - \url{https://gudhi.inria.fr/}
+    \item \textbf{Ripser.py} - \url{https://ripser.scikit-tda.org/en/latest/}
+    \item \textbf{Topology ToolKit (TTK)} - \url{https://topology-tool-kit.github.io/}
+\end{itemize}
+
+General Python utilities: \texttt{typer}, \texttt{tqdm}, \texttt{pandas}, \texttt{matplotlib}, \texttt{seaborn}, \texttt{jinja2}.
+
+\section{Reproducibility Notes}
+\begin{itemize}
+    \item Versions pinned in \texttt{environment.yml}.
+    \item Runtime and memory measured using \texttt{/usr/bin/time}.
+    \item CPU threads controlled via \texttt{OMP\_NUM\_THREADS}.
+\end{itemize}
+
+\end{document}
+
