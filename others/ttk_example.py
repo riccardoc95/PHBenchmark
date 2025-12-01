@@ -3,6 +3,7 @@ import vtk
 from vtk.util import numpy_support
 import cripser as cr
 import topologytoolkit as ttk
+import pixhomology as px
 
 import matplotlib.pyplot as plt
 
@@ -16,6 +17,18 @@ Z = np.random.randn(n,n)#np.exp(-4*(X**2 + Y**2))
 
 plt.imshow(Z)
 
+print("\n=== PixH ===")
+
+px_dgm0, px_dgm1 = px.computePH(Z, maxdim=1)
+print("----------")
+print("DGM0")
+print("----------")
+print(len(px_dgm0))
+print()
+print("----------")
+print("DGM1")
+print("----------")
+print(len(px_dgm1))
 
 print("\n=== CubicalRipser ===")
 cr_result = cr.compute_ph(
@@ -83,8 +96,4 @@ print("DGM1")
 print("----------")
 print(len(ttk_dgm1))
 
-import pixhomology as px
 
-px.computePH(Z, maxdim=1)
-cr_dgm0
-cr_dgm1

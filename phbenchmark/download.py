@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 DATASETS = {
     # "test": "19GnE8Qw375kXTHmG_35GaXabvHVXSfUc",
-    "mnist": "1pG1jzW8qNh5PRWT8kC4XT_udWQNSFLFo",
+    #"mnist": "1pG1jzW8qNh5PRWT8kC4XT_udWQNSFLFo",
     "cifar10": "17lULKw6WX546SJxcTYl0qsLZLqyPO1Hk",
     "imagenet": "1BNl5VivoFJpevkH7b0sYuVnN39d830T9",
     "div2k": "1XkeGHk9ObsDoChMSrunozZHyLeKGiJ5N",

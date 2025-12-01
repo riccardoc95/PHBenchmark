@@ -10,8 +10,11 @@ import typer
 from phbenchmark.download import IMAGE_SIZE
 from phbenchmark.run import METHODS as RUN_METHODS
 
-DATASETS = IMAGE_SIZE.keys()
-METHODS = RUN_METHODS.keys()
+DATASETS = list(IMAGE_SIZE.keys())
+METHODS = list(RUN_METHODS.keys())
+
+DATASETS = DATASETS[1:]
+METHODS = METHODS + ["ttk32"]
 
 
 def load_summary(json_path: str | Path):
