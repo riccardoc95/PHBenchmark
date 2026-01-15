@@ -974,9 +974,29 @@ Result computePH1(double *inputArr, int numR, int numC) {
         }
     }
 
-    // Set up mpatch array
-    for (int i = 0; i < numRows * numCols; i++) {
-        mpatch.push_back(i);
+    const int num_pixels = numRows * numCols;
+    bool argmax_on_boundary = false;
+    if (num_pixels > 0) {
+        int argmax_row = argmax / numCols;
+        int argmax_col = argmax % numCols;
+        argmax_on_boundary = (argmax_row == 0 || argmax_row == numRows - 1 ||
+                              argmax_col == 0 || argmax_col == numCols - 1);
+    }
+    const int boundary_idx = argmax_on_boundary ? argmax : num_pixels;
+
+    // Set up mpatch array (include a virtual boundary node)
+    mpatch.clear();
+    if (argmax_on_boundary) {
+        mpatch.reserve(num_pixels);
+        for (int i = 0; i < num_pixels; i++) {
+            mpatch.push_back(i);
+        }
+    } else {
+        mpatch.reserve(num_pixels + 1);
+        for (int i = 0; i < num_pixels; i++) {
+            mpatch.push_back(i);
+        }
+        mpatch.push_back(boundary_idx);
     }
 
     // First pass to find local maxima
@@ -1002,7 +1022,7 @@ Result computePH1(double *inputArr, int numR, int numC) {
                 // evita accessi fuori dai limiti
                 if (ni < 0 || ni >= numRows || nj < 0 || nj >= numCols){
                     localmax = max;
-                    best_point = numRows * numCols + 1;
+                    best_point = boundary_idx;
                     continue;
                 }
 
@@ -1024,7 +1044,6 @@ Result computePH1(double *inputArr, int numR, int numC) {
             mpatch[c_point] = best_point;
         }
     }
-    mpatch[numRows * numCols + 1] = argmax;
 
     // Second pass to update the mpatch array
     while (1) {
@@ -1105,24 +1124,29 @@ Result computePH1(double *inputArr, int numR, int numC) {
         }
 
         if (c_obj != t_obj) {
-            if (inputArray[c_obj] > inputArray[t_obj]) {
+            double c_obj_val = (c_obj == boundary_idx) ? max : inputArray[c_obj];
+            double t_obj_val = (t_obj == boundary_idx) ? max : inputArray[t_obj];
+            int c_obj_pos = (c_obj == boundary_idx) ? argmax : c_obj;
+            int t_obj_pos = (t_obj == boundary_idx) ? argmax : t_obj;
+
+            if (c_obj_val > t_obj_val) {
                 mpatch[t_obj] = c_obj;
-                if (fabs(inputArray[t_obj] - inputArray[t_point]) > 0) {
-                    dgm.push_back(inputArray[t_obj]);
+                if (fabs(t_obj_val - inputArray[t_point]) > 0) {
+                    dgm.push_back(t_obj_val);
                     dgm.push_back(inputArray[t_point]);
 
-                    dgm_pos.push_back(t_obj);
+                    dgm_pos.push_back(t_obj_pos);
                     dgm_pos.push_back(t_point);
 
                     num_dgm = num_dgm + 2;
                 }
-            } else if (inputArray[c_obj] < inputArray[t_obj]) {
+            } else if (c_obj_val < t_obj_val) {
                 mpatch[c_obj] = t_obj;
-                if (fabs(inputArray[c_obj] - inputArray[t_point]) > 0) {
-                    dgm.push_back(inputArray[c_obj]);
+                if (fabs(c_obj_val - inputArray[t_point]) > 0) {
+                    dgm.push_back(c_obj_val);
                     dgm.push_back(inputArray[t_point]);
 
-                    dgm_pos.push_back(c_obj);
+                    dgm_pos.push_back(c_obj_pos);
                     dgm_pos.push_back(t_point);
 
                     num_dgm = num_dgm + 2;
@@ -1130,22 +1154,22 @@ Result computePH1(double *inputArr, int numR, int numC) {
             } else{
                 if (c_obj > t_obj){
                     mpatch[t_obj] = c_obj;
-                    if (fabs(inputArray[t_obj] - inputArray[t_point]) > 0) {
-                        dgm.push_back(inputArray[t_obj]);
+                    if (fabs(t_obj_val - inputArray[t_point]) > 0) {
+                        dgm.push_back(t_obj_val);
                         dgm.push_back(inputArray[t_point]);
 
-                        dgm_pos.push_back(t_obj);
+                        dgm_pos.push_back(t_obj_pos);
                         dgm_pos.push_back(t_point);
 
                         num_dgm = num_dgm + 2;
                     }
                 }else{
                     mpatch[c_obj] = t_obj;
-                    if (fabs(inputArray[c_obj] - inputArray[t_point]) > 0) {
-                        dgm.push_back(inputArray[c_obj]);
+                    if (fabs(c_obj_val - inputArray[t_point]) > 0) {
+                        dgm.push_back(c_obj_val);
                         dgm.push_back(inputArray[t_point]);
 
-                        dgm_pos.push_back(c_obj);
+                        dgm_pos.push_back(c_obj_pos);
                         dgm_pos.push_back(t_point);
 
                         num_dgm = num_dgm + 2;
