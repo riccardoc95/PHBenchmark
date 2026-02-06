@@ -67,7 +67,7 @@ def collect_results(
                                     "time_s": float(0),
                                     "peak_memory_mb": float(0),
                                 })
-                            elif ("gudhi" in method or "ttk" in method) and dim == 0:
+                            elif (method == "gudhi" or "ttk" in method) and dim == 0:
                                 records.append({
                                     "filename": row["filename"],
                                     "time_s": float(0),

@@ -10,7 +10,7 @@
 
 # ====== USER CONFIG ======
 DATASETS=("mnist" "cifar10" "imagenet" "div2k" "kather" "mast")
-METHODS=("pixh" "cripser" "ttk" "gudhi" "ripser")
+METHODS=("pixh" "cripser" "ttk" "gudhi" "gudhi-sklearn" "ripser")
 DIMS=(0 1)
 
 # ====== SETUP ENVIRONMENT ======

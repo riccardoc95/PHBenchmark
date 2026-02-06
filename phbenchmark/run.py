@@ -26,6 +26,7 @@ METHODS = {
     "pixh":    current_path.parent / "tests" / "test_pixh.py",
     "cripser": current_path.parent / "tests" / "test_cripser.py",
     "gudhi":   current_path.parent / "tests" / "test_gudhi.py",
+    "gudhi-sklearn":   current_path.parent / "tests" / "test_gudhi_sklearn.py",
     "ripser":  current_path.parent / "tests" / "test_ripser.py",
     "ttk":     current_path.parent / "tests" / "test_ttk.py",
 }
