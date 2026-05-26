@@ -6,7 +6,56 @@ Tools to download 2D image datasets, benchmark multiple persistent homology (PH)
 
 ---
 
-## What’s inside
+## Quick start with Docker
+
+You can either build the container locally from this repository or pull the published image from GitHub Container Registry.
+
+### Pull and run the published image
+
+```bash
+docker pull ghcr.io/riccardoc95/phbenchmark:sha-89966c5
+
+docker run --rm \
+  -v "$PWD/results:/work/results" \
+  ghcr.io/riccardoc95/phbenchmark:sha-89966c5
+```
+
+### Build and run locally
+
+```bash
+# from the repository root
+docker build -t phbenchmark .
+
+# write benchmark outputs to ./results on the host
+docker run --rm \
+  -v "$PWD/results:/work/results" \
+  phbenchmark
+```
+
+By default, the image downloads all datasets at build time and the container runs all methods, datasets, dimensions, collection, and report generation.
+
+To build a smaller image with only one dataset:
+
+```bash
+docker build --build-arg DATASET=mnist -t phbenchmark:mnist .
+```
+
+To run a smaller benchmark:
+
+```bash
+docker run --rm \
+  -v "$PWD/results:/work/results" \
+  -e DATASET=mnist \
+  -e METHODS="pixh gudhi" \
+  -e DIMS="0 1" \
+  phbenchmark
+```
+
+You can use the same environment variables shown above (`DATASET`, `METHODS`, `DIMS`, `DOWNLOAD`, `RUN_BENCHMARKS`, `COLLECT`, `REPORT`) to customize what the container executes.
+
+---
+
+## What’s inside this Repository
 
 * **CLI**: `phbenchmark` (Typer app) with four subcommands: `download`, `run`, `collect`, `report`.
 * **Supported PH methods** (invoked via small Python wrappers in `phbenchmark/tests`):
@@ -336,4 +385,3 @@ phbenchmark report    # build plots + LaTeX table from the summary
 ```
 
 Run `phbenchmark <subcommand> --help` for all flags.
-
