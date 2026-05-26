@@ -1,0 +1,28 @@
+Dockerfile
+  s_3c329f728e788d::t_cb56968f232c5d 1-27,31-34
+  s_3c329f728e788d::t_a43eec670c644b 28-30
+.github/workflows/docker-publish.yml
+  s_3c329f728e788d::t_20f99bd7f48d80 1-65
+docker-entrypoint.sh
+  s_3c329f728e788d::t_cb56968f232c5d 1-3,5-8,10-68
+  s_3c329f728e788d::t_a43eec670c644b 4,9
+.dockerignore
+  s_3c329f728e788d::t_20f99bd7f48d80 2
+  s_3c329f728e788d::t_cb56968f232c5d 1,3-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.1",
+  "base_commit_sha": "89966c5282bee339505c258a8c95fbde81f35a7d",
+  "prompts": {},
+  "sessions": {
+    "s_3c329f728e788d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e62ec-f0ab-70e2-a286-a5742d6219ce",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Riccardo Ceccaroni <riccardo.ceccaroni.95@gmail.com>"
+    }
+  }
+}
