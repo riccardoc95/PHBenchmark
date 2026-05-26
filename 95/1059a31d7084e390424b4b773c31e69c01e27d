@@ -1,0 +1,19 @@
+README.md
+  s_9735740d7faed3::t_ac05bd4a2990e0 9-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.1",
+  "base_commit_sha": "951059a31d7084e390424b4b773c31e69c01e27d",
+  "prompts": {},
+  "sessions": {
+    "s_9735740d7faed3": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e63fb-cef5-71e0-b8c1-4a732a156612",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Riccardo Ceccaroni <riccardo.ceccaroni.95@gmail.com>"
+    }
+  }
+}
