@@ -1,0 +1,15 @@
+[Tue Nov  4 22:33:37 CET 2025] Running METHOD=pixh, DATASET=kather, DIM=1
+Saving to results/pixh/kather/dim1.csv
+Running pixh on datasets/kather_npy (maxdim=1)...
+  Running img_0.npy ... done (28.30s, 750.45MB)
+  Running img_1.npy ... done (21.80s, 730.09MB)
+  Running img_2.npy ... done (21.51s, 796.26MB)
+  Running img_3.npy ... done (21.81s, 765.11MB)
+  Running img_4.npy ... done (22.82s, 787.59MB)
+  Running img_5.npy ... done (24.32s, 789.53MB)
+  Running img_6.npy ... done (26.67s, 816.83MB)
+  Running img_7.npy ... done (28.06s, 790.96MB)
+  Running img_8.npy ... done (23.97s, 809.63MB)
+  Running img_9.npy ... done (22.28s, 769.74MB)
+
+Results saved into results/pixh/kather/dim1.csv

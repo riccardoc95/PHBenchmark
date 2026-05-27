@@ -1,0 +1,15 @@
+[Tue Nov  4 22:33:37 CET 2025] Running METHOD=ttk, DATASET=kather, DIM=1
+Saving to results/ttk/kather/dim1.csv
+Running ttk on datasets/kather_npy (maxdim=1)...
+  Running img_0.npy ... done (55.46s, 2603.80MB)
+  Running img_1.npy ... done (52.69s, 2587.82MB)
+  Running img_2.npy ... done (55.35s, 2650.85MB)
+  Running img_3.npy ... done (49.90s, 2615.81MB)
+  Running img_4.npy ... done (44.97s, 2644.13MB)
+  Running img_5.npy ... done (49.89s, 2642.62MB)
+  Running img_6.npy ... done (44.14s, 2666.71MB)
+  Running img_7.npy ... done (41.12s, 2612.87MB)
+  Running img_8.npy ... done (40.92s, 2581.34MB)
+  Running img_9.npy ... done (33.36s, 2633.23MB)
+
+Results saved into results/ttk/kather/dim1.csv

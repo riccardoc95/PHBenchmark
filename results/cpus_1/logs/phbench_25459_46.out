@@ -1,0 +1,15 @@
+[Tue Nov  4 22:33:37 CET 2025] Running METHOD=gudhi, DATASET=kather, DIM=0
+Saving to results/gudhi/kather/dim0.csv
+Running gudhi on datasets/kather_npy (maxdim=0)...
+  Running img_0.npy ... done (118.06s, 4826.57MB)
+  Running img_1.npy ... done (116.22s, 4796.48MB)
+  Running img_2.npy ... done (112.60s, 4913.78MB)
+  Running img_3.npy ... done (110.21s, 4850.95MB)
+  Running img_4.npy ... done (104.25s, 4871.18MB)
+  Running img_5.npy ... done (109.98s, 4889.31MB)
+  Running img_6.npy ... done (108.98s, 4940.04MB)
+  Running img_7.npy ... done (106.32s, 4877.29MB)
+  Running img_8.npy ... done (108.91s, 4924.58MB)
+  Running img_9.npy ... done (105.03s, 4862.80MB)
+
+Results saved into results/gudhi/kather/dim0.csv

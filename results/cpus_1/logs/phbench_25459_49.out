@@ -1,0 +1,15 @@
+[Tue Nov  4 22:33:37 CET 2025] Running METHOD=ripser, DATASET=kather, DIM=1
+Saving to results/ripser/kather/dim1.csv
+Running ripser on datasets/kather_npy (maxdim=1)...
+  Running img_0.npy ... done (40.60s, 222.00MB)
+  Running img_1.npy ... done (34.90s, 223.38MB)
+  Running img_2.npy ... done (33.07s, 227.55MB)
+  Running img_3.npy ... done (38.65s, 221.91MB)
+  Running img_4.npy ... done (37.52s, 225.79MB)
+  Running img_5.npy ... done (26.36s, 230.29MB)
+  Running img_6.npy ... done (25.96s, 223.45MB)
+  Running img_7.npy ... done (23.13s, 228.02MB)
+  Running img_8.npy ... done (33.32s, 197.81MB)
+  Running img_9.npy ... done (26.14s, 224.20MB)
+
+Results saved into results/ripser/kather/dim1.csv
