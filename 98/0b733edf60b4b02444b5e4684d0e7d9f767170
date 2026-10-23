@@ -1,0 +1,83 @@
+results/local_test/benchmark_table.tex
+  s_89159073d55eb5::t_72704e264f4ddf 1-22
+results/local_test/ttk/cifar10/dim0.csv
+  s_89159073d55eb5::t_ba88fcdfc7ae76 1-21
+results/local_test/gudhi-sklearn/cifar10/dim1.csv
+  s_89159073d55eb5::t_984b0ff9018cbd 1-21
+phbenchmark/collect.py
+  s_89159073d55eb5::t_b09be2480f6a27 68,75,82
+  s_89159073d55eb5::t_179a491b4bb8a9 97,103-104
+phbenchmark/tests/test_cripser.py
+  s_89159073d55eb5::t_fc358994569105 2-4,7-8
+results/local_test/gudhi/cifar10/dim0.csv
+  s_89159073d55eb5::t_984b0ff9018cbd 1-21
+phbenchmark/tests/test_pixh.py
+  s_89159073d55eb5::t_073d65c167fa90 2-4,7-8
+phbenchmark/tests/test_gudhi.py
+  s_89159073d55eb5::t_a4ffcfae760da2 1-4,7-8
+phbenchmark/run.py
+  s_89159073d55eb5::t_4127849eb4da1d 110,115-117,119
+  s_89159073d55eb5::t_bff22cbf9a50d8 107
+  s_89159073d55eb5::t_3bed5e0db708c8 74,76
+  s_89159073d55eb5::t_4046c328e2e562 35-41,46
+results/local_test/gudhi-sklearn/cifar10/dim0.csv
+  s_89159073d55eb5::t_984b0ff9018cbd 1-21
+results/local_test/gudhi/cifar10/dim1.csv
+  s_89159073d55eb5::t_984b0ff9018cbd 1-21
+results/local_test/cripser/cifar10/dim1.csv
+  s_89159073d55eb5::t_984b0ff9018cbd 1-21
+results/local_test/ripser/cifar10/dim0.csv
+  s_89159073d55eb5::t_984b0ff9018cbd 1-21
+README.md
+  s_89159073d55eb5::t_3b26f4f7379aa4 304
+  s_89159073d55eb5::t_0905c4717f536b 238-239
+  s_89159073d55eb5::t_c33eb7949c363c 202-203,207
+  s_89159073d55eb5::t_4169a6237380ec 259,262
+  s_89159073d55eb5::t_a27c19e2e9fdd9 208
+results/local_test/pixh/cifar10/dim0.csv
+  s_89159073d55eb5::t_984b0ff9018cbd 1-21
+results/local_test/ripser/cifar10/dim1.csv
+  s_89159073d55eb5::t_984b0ff9018cbd 1-21
+results/local_test/benchmarks.json
+  s_89159073d55eb5::t_ba64b5a91bb085 1-1490
+.gitignore
+  s_89159073d55eb5::t_e7241fd86ba5ce 208-210
+results/local_test/cripser/cifar10/dim0.csv
+  s_89159073d55eb5::t_984b0ff9018cbd 1-21
+results/local_test/pixh/cifar10/dim1.csv
+  s_89159073d55eb5::t_984b0ff9018cbd 1-21
+phbenchmark/report.py
+  s_89159073d55eb5::t_e238d49ea7406d 91-92,97,101,108
+  s_89159073d55eb5::t_69c97691bef721 192-245
+  s_89159073d55eb5::t_92939fbfb3d85c 381,384
+  s_89159073d55eb5::t_c91c98b590a425 45
+  s_89159073d55eb5::t_98adf5a34685f5 26
+  s_89159073d55eb5::t_ed39de4096c76c 396
+  s_89159073d55eb5::t_18f538d37fb223 59,66,68,79
+results/local_test/ttk/cifar10/dim1.csv
+  s_89159073d55eb5::t_ba88fcdfc7ae76 1-21
+phbenchmark/tests/test_ripser.py
+  s_89159073d55eb5::t_cdb812c048ecee 2-4,7-8
+results/local_test/benchmarks_summary.json
+  s_89159073d55eb5::t_ba64b5a91bb085 1-134
+phbenchmark/tests/test_ttk.py
+  s_89159073d55eb5::t_0f2c3064b1d4a8 1-4,10-11
+phbenchmark/tests/test_gudhi_sklearn.py
+  s_89159073d55eb5::t_d95c45e02caaee 2,4-5,7-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "980b733edf60b4b02444b5e4684d0e7d9f767170",
+  "prompts": {},
+  "sessions": {
+    "s_89159073d55eb5": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_e9895a3eaffeyW9mcyQq4N5L76",
+        "model": "nw-full"
+      },
+      "human_author": "Riccardo Ceccaroni <riccardo.ceccaroni.95@gmail.com>"
+    }
+  }
+}
