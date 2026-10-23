@@ -199,10 +199,12 @@ Options:
 The CSV schema is:
 
 ```
-filename,time_s,peak_memory_mb
-img_000001.npy,0.31,85.27
+filename,time_s,import_time_s,peak_memory_mb
+img_000001.npy,0.31,0.18,85.27
 ...
 ```
+
+`import_time_s` is the time spent importing the libraries, measured inside each benchmark script (`tests/test_*.py`) with `time.perf_counter()` and reported via an `IMPORT_TIME=...` marker on stdout. Older CSVs without this column are still accepted by `collect` (treated as 0).
 
 **Notes**
 
@@ -233,8 +235,8 @@ Inputs:
 
 Outputs:
 
-* **Full JSON** (`benchmarks.json`): groups raw timings/memory per file.
-* **Summary JSON** (`benchmarks_summary.json`): per `(method, dataset, dim)` averages and standard deviations.
+* **Full JSON** (`benchmarks.json`): groups raw timings/import times/memory per file.
+* **Summary JSON** (`benchmarks_summary.json`): per `(method, dataset, dim)` averages and standard deviations of time, import time and memory.
 
 ---
 
@@ -254,9 +256,10 @@ phbenchmark report \
 What you’ll get:
 
 * `results/plots/time_memory_per_dataset.pdf` — for each dataset: log‑scaled bars of Avg Time [s] and Avg Peak Memory [MB], split by dim.
+* `results/plots/import_vs_compute_per_dataset.pdf` — for each dataset: stacked bars of library import time (hatched) and compute time, split by dim.
 * `results/plots/scalability.pdf` — image size vs time [s] (log‑log) per method.
 * `results/plots/time_vs_memory_per_dataset.pdf` — scatter of Time vs Memory per dataset, color = method, style = dim.
-* `results/benchmark_table.tex` — LaTeX `tabular` with Avg Time and Avg Peak Memory for all methods/datasets/dims.
+* `results/benchmark_table.tex` — LaTeX `tabular` with Avg Time, Avg Import Time and Avg Peak Memory for all methods/datasets/dims.
 
 > The plotting code treats `-1` values as missing (rendered as `--` in the LaTeX table).
 
@@ -298,6 +301,7 @@ results/
 ├─ benchmarks_summary.json
 ├─ plots/
 │  ├─ time_memory_per_dataset.pdf
+│  ├─ import_vs_compute_per_dataset.pdf
 │  ├─ scalability.pdf
 │  └─ time_vs_memory_per_dataset.pdf
 └─ benchmark_table.tex

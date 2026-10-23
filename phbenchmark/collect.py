@@ -65,18 +65,21 @@ def collect_results(
                                 records.append({
                                     "filename": row["filename"],
                                     "time_s": float(0),
+                                    "import_time_s": float(0),
                                     "peak_memory_mb": float(0),
                                 })
                             elif (method == "gudhi" or "ttk" in method) and dim == 0:
                                 records.append({
                                     "filename": row["filename"],
                                     "time_s": float(0),
+                                    "import_time_s": float(0),
                                     "peak_memory_mb": float(0),
                                 })
                             else:
                                 records.append({
                                     "filename": row["filename"],
                                     "time_s": float(row["time_s"]),
+                                    "import_time_s": float(row.get("import_time_s") or 0),
                                     "peak_memory_mb": float(row["peak_memory_mb"]),
                                 })
                         except ValueError:
@@ -91,11 +94,14 @@ def collect_results(
 
                 # --- Compute summary stats ---
                 times = [r["time_s"] for r in records]
+                imports = [r["import_time_s"] for r in records]
                 mems = [r["peak_memory_mb"] for r in records]
 
                 summary[method][dataset][dim] = {
                     "avg_time_s": statistics.mean(times),
                     "std_time_s": statistics.pstdev(times) if len(times) > 1 else 0.0,
+                    "avg_import_time_s": statistics.mean(imports),
+                    "std_import_time_s": statistics.pstdev(imports) if len(imports) > 1 else 0.0,
                     "avg_peak_memory_mb": statistics.mean(mems),
                     "std_peak_memory_mb": statistics.pstdev(mems) if len(mems) > 1 else 0.0,
                     "num_files": len(records)

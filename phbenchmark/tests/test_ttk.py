@@ -1,9 +1,14 @@
+import sys
+import time
+
+_t0 = time.perf_counter()
 import numpy as np
 import vtk
 from vtk.util import numpy_support
 import cripser as cr
 import topologytoolkit as ttk
-import sys
+_import_s = time.perf_counter() - _t0
+print(f"IMPORT_TIME={_import_s:.6f}")
 
 
 if __name__ == "__main__":

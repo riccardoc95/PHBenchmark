@@ -32,11 +32,18 @@ METHODS = {
 }
 
 
-def run_with_time(script_path: Path, npy_file: Path, maxdim: int) -> tuple[float, float]:
+def parse_import_time(stdout: str) -> float:
+    """Extract the IMPORT_TIME marker (seconds) printed by the benchmark scripts."""
+    match = re.search(r"IMPORT_TIME=([0-9]*\.?[0-9]+)", stdout)
+    return float(match.group(1)) if match else 0.0
+
+
+def run_with_time(script_path: Path, npy_file: Path, maxdim: int) -> tuple[float, float, float]:
     """
     Run the Python script using `/usr/bin/time` and return:
       - execution time in seconds
       - peak memory in MB (including all subprocesses)
+      - library import time in seconds (from the IMPORT_TIME marker in stdout)
     """
     system = platform.system().lower()
     if system == "linux":
@@ -64,8 +71,9 @@ def run_with_time(script_path: Path, npy_file: Path, maxdim: int) -> tuple[float
 
     mem_match = re.search(regex, process.stderr)
     mem_mb = float(mem_match.group(1)) / divisor if mem_match else 0.0
+    import_s = parse_import_time(process.stdout)
 
-    return elapsed, mem_mb
+    return elapsed, mem_mb, import_s
 
 
 def run_benchmark(
@@ -96,18 +104,19 @@ def run_benchmark(
         typer.echo(f"No .npy files found in {dataset_dir}")
         raise typer.Exit()
 
+    output_csv.parent.mkdir(parents=True, exist_ok=True)
     with open(output_csv, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(["filename", "time_s", "peak_memory_mb"])
+        writer.writerow(["filename", "time_s", "import_time_s", "peak_memory_mb"])
 
         for npy_file in npy_files:
             typer.echo(f"  Running {npy_file.name} ...", nl=False)
             try:
-                elapsed, mem_mb = run_with_time(python_script, npy_file, maxdim)
-                writer.writerow([npy_file.name, f"{elapsed:.2f}", f"{mem_mb:.2f}"])
-                typer.echo(f" done ({elapsed:.2f}s, {mem_mb:.2f}MB)")
+                elapsed, mem_mb, import_s = run_with_time(python_script, npy_file, maxdim)
+                writer.writerow([npy_file.name, f"{elapsed:.2f}", f"{import_s:.2f}", f"{mem_mb:.2f}"])
+                typer.echo(f" done ({elapsed:.2f}s, import {import_s:.2f}s, {mem_mb:.2f}MB)")
             except Exception as e:
-                writer.writerow([npy_file.name, "error", "error"])
+                writer.writerow([npy_file.name, "error", "error", "error"])
                 typer.echo(f" Error: {e}")
 
     typer.echo(f"\nResults saved into {output_csv}")

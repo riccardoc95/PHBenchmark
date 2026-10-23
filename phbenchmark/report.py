@@ -23,7 +23,7 @@ def load_summary(json_path: str | Path):
 
     records = []
     for method in METHODS:
-        datasets = data[method]
+        datasets = data.get(method, {})
         for dataset in DATASETS:
             try:
                 dims = datasets[dataset]
@@ -42,6 +42,7 @@ def load_summary(json_path: str | Path):
                     "dim": 0,
                     "image_size": IMAGE_SIZE.get(dataset, np.nan),
                     "avg_time_s":0,
+                    "avg_import_time_s": 0,
                     "avg_peak_memory_mb": 0
                 })
 
@@ -55,15 +56,16 @@ PALETTE = sns.color_palette("tab10", 10)
 def summary_to_latex_table(
     df: pd.DataFrame,
     output_path: Path | None = None,
-    caption: str = "Benchmark summary: average time (s) and memory (MB).",
+    caption: str = "Benchmark summary: average time (s), library import time (s) and peak memory (MB).",
     label: str = "tab:bench_summary",
     float_precision: int = 2,
 ):
     """
     Build a LaTeX table from the summary dataframe.
 
-    The table has a multi-index on rows (dataset, dim) and two column blocks:
+    The table has a multi-index on rows (dataset, dim) and three column blocks:
       - avg_time_s (one column per method)
+      - avg_import_time_s (one column per method)
       - avg_peak_memory_mb (one column per method)
 
     Notes:
@@ -74,7 +76,7 @@ def summary_to_latex_table(
     # Sanity & cleaning
     work = df.copy()
     # treat sentinel -1 as missing
-    for col in ("avg_time_s", "avg_peak_memory_mb"):
+    for col in ("avg_time_s", "avg_import_time_s", "avg_peak_memory_mb"):
         if col in work.columns:
             work.loc[work[col] < 0, col] = np.nan
 
@@ -86,24 +88,24 @@ def summary_to_latex_table(
     work["method"] = pd.Categorical(work["method"], categories=method_order, ordered=True)
     work = work.sort_values(["dataset", "dim", "method"])
 
-    # Pivot to wide with two top-level metric blocks
+    # Pivot to wide with three top-level metric blocks
+    metric_blocks = ["avg_time_s", "avg_import_time_s", "avg_peak_memory_mb"]
     table = (
         work.pivot_table(
             index=["dataset", "dim"],
             columns="method",
-            values=["avg_time_s", "avg_peak_memory_mb"],
+            values=metric_blocks,
             aggfunc="first",
         )
         .reindex(columns=pd.MultiIndex.from_product(
-            [["avg_time_s", "avg_peak_memory_mb"], method_order]
+            [metric_blocks, method_order]
         ))
         .round(float_precision)
     )
 
     # Pretty column headers
     table.columns = pd.MultiIndex.from_tuples(
-        [("avg_time_s", m) if top == "avg_time_s" else ("avg_peak_memory_mb", m)
-         for (top, m) in table.columns]
+        [(top, m) for (top, m) in table.columns]
     )
 
     # Build LaTeX body (without caption/label)
@@ -184,6 +186,60 @@ def plot_time_and_memory_per_dataset(df: pd.DataFrame, plots_dir: Path):
 
     plt.tight_layout()
     plt.savefig(plots_dir / "time_memory_per_dataset.pdf", bbox_inches="tight")
+    plt.close()
+
+
+def plot_import_vs_compute(df: pd.DataFrame, plots_dir: Path):
+    work = df.copy()
+    if "avg_import_time_s" not in work.columns:
+        work["avg_import_time_s"] = 0.0
+    work["compute_time_s"] = (work["avg_time_s"] - work["avg_import_time_s"]).clip(lower=0)
+
+    datasets = sorted(df["dataset"].unique())
+    n = len(datasets)
+    fig, axes = plt.subplots(nrows=n, ncols=1, figsize=(10, 4 * n))
+    if n == 1:
+        axes = np.array([axes])
+
+    palette = sns.color_palette("Set2")
+
+    for i, dataset in enumerate(datasets):
+        subset = work[work["dataset"] == dataset]
+        imp = subset.pivot_table(
+            index="method", columns="dim", values="avg_import_time_s", aggfunc="first"
+        ).sort_index().fillna(0)
+        cmp_ = subset.pivot_table(
+            index="method", columns="dim", values="compute_time_s", aggfunc="first"
+        ).sort_index().fillna(0)
+        dims = sorted(imp.columns)
+
+        ax = axes[i]
+        x = np.arange(len(imp.index))
+        width = 0.8 / len(dims)
+        for j, dim in enumerate(dims):
+            base = x + j * width
+            ax.bar(
+                base, imp[dim].values, width=width,
+                color=palette[j % len(palette)], hatch="///",
+                edgecolor="black", linewidth=0.5,
+                label=f"Dim {dim} (import)",
+            )
+            ax.bar(
+                base, cmp_[dim].values, width=width, bottom=imp[dim].values,
+                color=palette[j % len(palette)],
+                edgecolor="black", linewidth=0.5,
+                label=f"Dim {dim} (compute)",
+            )
+        ax.set_xticks(x + 0.4 - width / 2)
+        ax.set_xticklabels(imp.index)
+        ax.set_title(f"{dataset}: Library import vs compute time")
+        ax.set_ylabel("Time [s]")
+        ax.set_xlabel("")
+        ax.legend(ncols=2, fontsize=9)
+        ax.tick_params(axis="x", rotation=30)
+
+    plt.tight_layout()
+    plt.savefig(plots_dir / "import_vs_compute_per_dataset.pdf", bbox_inches="tight")
     plt.close()
 
 
@@ -322,9 +378,10 @@ def make_report(
     """
     Generate advanced benchmark reports including:
       - time and memory per dataset (dim0 vs dim1)
+      - library import time vs compute time (stacked bars, per dataset)
       - scalability vs image size
       - time vs memory tradeoff (per dataset)
-      - LaTeX summary table (average time/memory per method)
+      - LaTeX summary table (average time/import time/memory per method)
     """
     typer.echo(f"Loading summary from {summary_json}")
     if not summary_json.exists():
@@ -336,6 +393,7 @@ def make_report(
 
     typer.echo("Generating advanced plots...")
     plot_time_and_memory_per_dataset(df, plots_dir)
+    plot_import_vs_compute(df, plots_dir)
     plot_scalability(df, plots_dir)
     plot_time_vs_memory(df, plots_dir, only_largest=False)
 
@@ -343,8 +401,6 @@ def make_report(
     summary_to_latex_table(
         df,
         output_path=latex_output,
-        caption="Benchmark summary: average time (s) and peak memory (MB).",
-        label="tab:bench_summary",
     )
 
     typer.echo("Report generation complete.")
