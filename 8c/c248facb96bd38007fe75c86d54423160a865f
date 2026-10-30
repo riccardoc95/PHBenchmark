@@ -1,0 +1,25 @@
+profiler/mem_prof/pixhomology_gauss/compile.sh
+  s_0aeb38d118056d::t_da2f4b74b9fb73 1-8
+profiler/mem_prof/pixhomology/gprof.sh
+  s_0aeb38d118056d::t_55f2a83d97fbf4 1
+profiler/mem_prof/pixhomology/compile.sh
+  s_0aeb38d118056d::t_eb60b2135ab7b1 1-9
+profiler/time_prof/gprof.sh
+  s_0aeb38d118056d::t_a068ec496378e3 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8cc248facb96bd38007fe75c86d54423160a865f",
+  "prompts": {},
+  "sessions": {
+    "s_0aeb38d118056d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_e73412912ffeqBfnU482d5Y6yz",
+        "model": "nw-full"
+      },
+      "human_author": "Riccardo Ceccaroni <riccardo.ceccaroni.95@gmail.com>"
+    }
+  }
+}
