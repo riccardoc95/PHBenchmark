@@ -1,5 +1,5 @@
-gcc -o ./pixhomology/profiler ./pixhomology/pixhom.c -pg -std=c99
-gcc -o ./pixhomology_gauss/profiler ./pixhomology_gauss/pixhom.c -pg -std=c99 -lm
+gcc -O3 -o ./pixhomology/profiler ./pixhomology/pixhom.c -pg -std=c99
+gcc -O3 -o ./pixhomology_gauss/profiler ./pixhomology_gauss/pixhom.c -pg -std=c99 -lm
 
 # pixhomology
 ./pixhomology/profiler 32 32

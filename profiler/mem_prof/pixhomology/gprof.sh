@@ -1,4 +1,4 @@
-gcc -o ./profiler ./pixhom.c -pg -std=c99
+gcc -O3 -o ./profiler ./pixhom.c -pg -std=c99
 
 ./profiler 32 32
 gprof profiler > out_32.prof
