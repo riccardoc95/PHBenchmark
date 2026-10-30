@@ -1,0 +1,46 @@
+desc: --time-unit=ms --massif-out-file=out1/massif.out.pixh_2048_step2
+cmd: ./pixhomology/step2 2048 2048
+time_unit: ms
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=160
+mem_heap_B=33554432
+mem_heap_extra_B=4040
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=161
+mem_heap_B=33555000
+mem_heap_extra_B=4056
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=10321
+mem_heap_B=33555000
+mem_heap_extra_B=4056
+mem_stacks_B=0
+heap_tree=peak
+n2: 33555000 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 33554432 0x400CAD: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step2)
+ n0: 568 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=4
+#-----------
+time=10321
+mem_heap_B=33554432
+mem_heap_extra_B=4040
+mem_stacks_B=0
+heap_tree=empty

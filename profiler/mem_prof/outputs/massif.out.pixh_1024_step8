@@ -1,0 +1,575 @@
+desc: --time-unit=ms --massif-out-file=out1/massif.out.pixh_1024_step8
+cmd: ./pixhomology/step8 1024 1024
+time_unit: ms
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=112
+mem_heap_B=8389176
+mem_heap_extra_B=4056
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=2633
+mem_heap_B=8389176
+mem_heap_extra_B=4056
+mem_stacks_B=0
+heap_tree=detailed
+n2: 8389176 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 8388608 0x400CED: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n0: 568 in 1 place, below massif's threshold (1.00%)
+#-----------
+snapshot=3
+#-----------
+time=3488
+mem_heap_B=12968456
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=4525
+mem_heap_B=13247256
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=5599
+mem_heap_B=13450456
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=7379
+mem_heap_B=13715256
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=8650
+mem_heap_B=13855656
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=10320
+mem_heap_B=14033656
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=11273
+mem_heap_B=14130456
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=12853
+mem_heap_B=14280952
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=14645
+mem_heap_B=14437208
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=16437
+mem_heap_B=14581672
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=18229
+mem_heap_B=14713944
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=20021
+mem_heap_B=14832152
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=detailed
+n4: 14832152 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 8388608 0x400CED: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n0: 4194304 0x400E5A: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n2: 2249240 0x400BAF: findUpoints (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 2249240 0x4018F8: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 0 in 22 places, all below massif's threshold (1.00%)
+ n0: 0 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=15
+#-----------
+time=21813
+mem_heap_B=14944856
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=23605
+mem_heap_B=15052216
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=25397
+mem_heap_B=15155416
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=27189
+mem_heap_B=15254696
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=28981
+mem_heap_B=15349752
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=detailed
+n4: 15349752 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 8388608 0x400CED: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n0: 4194304 0x400E5A: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n2: 2766840 0x400BAF: findUpoints (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 2766840 0x4018D0: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 0 in 22 places, all below massif's threshold (1.00%)
+ n0: 0 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=20
+#-----------
+time=30773
+mem_heap_B=15441352
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=32565
+mem_heap_B=15531128
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=34133
+mem_heap_B=15607512
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=35925
+mem_heap_B=15692552
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=37717
+mem_heap_B=15775176
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=38613
+mem_heap_B=15815848
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=39733
+mem_heap_B=15865976
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=41525
+mem_heap_B=15944648
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=42421
+mem_heap_B=15983304
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=detailed
+n4: 15983304 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 8388608 0x400CED: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n0: 4194304 0x400E5A: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n2: 3400392 0x400BAF: findUpoints (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 3400392 0x4019B9: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 0 in 22 places, all below massif's threshold (1.00%)
+ n0: 0 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=29
+#-----------
+time=43317
+mem_heap_B=16021528
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=44213
+mem_heap_B=16059336
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=45333
+mem_heap_B=16106008
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=46229
+mem_heap_B=16142888
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=47125
+mem_heap_B=16179432
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=48021
+mem_heap_B=16215624
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=detailed
+n4: 16215624 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 8388608 0x400CED: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n0: 4194304 0x400E5A: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n2: 3632712 0x400BAF: findUpoints (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 3632712 0x401942: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 0 in 22 places, all below massif's threshold (1.00%)
+ n0: 0 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=35
+#-----------
+time=48917
+mem_heap_B=16251448
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=49813
+mem_heap_B=16286936
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=50933
+mem_heap_B=16330808
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=51829
+mem_heap_B=16365560
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=52725
+mem_heap_B=16399992
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=53621
+mem_heap_B=16434104
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=detailed
+n4: 16434104 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 8388608 0x400CED: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n0: 4194304 0x400E5A: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n2: 3851192 0x400BAF: findUpoints (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 3851192 0x4018D0: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 0 in 22 places, all below massif's threshold (1.00%)
+ n0: 0 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=41
+#-----------
+time=54517
+mem_heap_B=16467896
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=55413
+mem_heap_B=16501432
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=56533
+mem_heap_B=16542952
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=57429
+mem_heap_B=16575688
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=58325
+mem_heap_B=16608216
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=59221
+mem_heap_B=16640600
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=detailed
+n4: 16640600 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 8388608 0x400CED: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n0: 4194304 0x400E5A: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n2: 4057688 0x400BAF: findUpoints (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 4057688 0x4018D0: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 0 in 22 places, all below massif's threshold (1.00%)
+ n0: 0 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=47
+#-----------
+time=60117
+mem_heap_B=16672728
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=61013
+mem_heap_B=16704600
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=62133
+mem_heap_B=16744104
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=62245
+mem_heap_B=16748024
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=62357
+mem_heap_B=16751960
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=62469
+mem_heap_B=16755880
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=62581
+mem_heap_B=16759800
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=detailed
+n4: 16759800 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 8388608 0x400CED: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n0: 4194304 0x400E5A: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n2: 4176888 0x400BAF: findUpoints (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 4176888 0x4018A9: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 0 in 22 places, all below massif's threshold (1.00%)
+ n0: 0 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=54
+#-----------
+time=62693
+mem_heap_B=16763720
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=62805
+mem_heap_B=16767624
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=62917
+mem_heap_B=16771528
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=63029
+mem_heap_B=16775448
+mem_heap_extra_B=8096
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=63141
+mem_heap_B=16908232
+mem_heap_extra_B=12176
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=63254
+mem_heap_B=17137608
+mem_heap_extra_B=12176
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=63329
+mem_heap_B=17272960
+mem_heap_extra_B=8480
+mem_stacks_B=0
+heap_tree=detailed
+n4: 17272960 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 8388608 0x400CED: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n2: 4689480 0x400BAF: findUpoints (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 4689480 0x401C7E: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 0 in 27 places, all below massif's threshold (1.00%)
+ n0: 4194304 0x400E5A: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n0: 568 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=61
+#-----------
+time=63723
+mem_heap_B=21961872
+mem_heap_extra_B=8848
+mem_stacks_B=0
+heap_tree=peak
+n5: 21961872 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 8388608 0x400CED: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n2: 4689480 0x400BAF: findUpoints (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 4689480 0x401C7E: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+  n0: 0 in 27 places, all below massif's threshold (1.00%)
+ n1: 4689480 0x4E6DF08: qsort_r (in /usr/lib64/libc-2.17.so)
+  n0: 4689480 0x40205B: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n0: 4194304 0x400E5A: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology/step8)
+ n0: 0 in 2 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=62
+#-----------
+time=63835
+mem_heap_B=17461248
+mem_heap_extra_B=8488
+mem_stacks_B=0
+heap_tree=empty

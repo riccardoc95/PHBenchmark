@@ -1,0 +1,55 @@
+desc: --time-unit=ms --massif-out-file=out1/massif.out.pixh_gauss_32_step2
+cmd: ./pixhomology_gauss/step2 32 32
+time_unit: ms
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=171
+mem_heap_B=8192
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=173
+mem_heap_B=8760
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=212
+mem_heap_B=8760
+mem_heap_extra_B=24
+mem_stacks_B=0
+heap_tree=peak
+n2: 8760 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n0: 8192 0x400DA3: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology_gauss/step2)
+ n1: 568 0x51A5C4C: __fopen_internal (in /usr/lib64/libc-2.17.so)
+  n0: 568 0x400E6B: main (in /lustre/home/rceccaroni/profiler/scripts/pixhomology_gauss/step2)
+#-----------
+snapshot=4
+#-----------
+time=212
+mem_heap_B=8192
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=213
+mem_heap_B=16384
+mem_heap_extra_B=16
+mem_stacks_B=0
+heap_tree=empty

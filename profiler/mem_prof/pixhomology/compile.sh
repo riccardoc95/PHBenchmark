@@ -1,0 +1,9 @@
+gcc -o ./pixhomology/step1 ./pixhomology/step1.c -std=c99
+gcc -o ./pixhomology/step2 ./pixhomology/step2.c -std=c99
+gcc -o ./pixhomology/step3 ./pixhomology/step3.c -std=c99
+gcc -o ./pixhomology/step4 ./pixhomology/step4.c -std=c99
+gcc -o ./pixhomology/step5 ./pixhomology/step5.c -std=c99
+gcc -o ./pixhomology/step6 ./pixhomology/step6.c -std=c99
+gcc -o ./pixhomology/step7 ./pixhomology/step7.c -std=c99
+gcc -o ./pixhomology/step8 ./pixhomology/step8.c -std=c99
+gcc -o ./pixhomology/profiler ./pixhomology/step8.c -pg -std=c99
